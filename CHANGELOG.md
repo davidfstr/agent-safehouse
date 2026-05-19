@@ -10,6 +10,41 @@
 
 - No profiles changed.
 
+## [0.10.0] - 2026-05-19
+
+### Features
+
+- Added Elixir runtime support, including Mix archives, escripts, task cache, and Hex package cache access.
+- Expanded the Xcode integration to support simulator-targeted builds, `simctl`, `actool`, SwiftUI previews, and CoreSimulator-managed runtime enumeration.
+
+### Bug Fixes
+
+- Xcode now reads the system-level license acceptance plist and Swift Package Manager cache, avoiding unnecessary license prompts and SPM cache denials inside the sandbox.
+- `chromium-full` now covers Chrome for Testing Crashpad xattrs and child-port handshakes so Chrome for Testing can complete startup.
+- GUI app integrations now allow Finder drag-and-drop coordination through `com.apple.coredrag`.
+- Interactive terminal agents can now perform tty/pty ioctls such as `tcsetattr`, preventing raw-mode failures that leak escape sequences into agent input.
+
+### Chores
+
+- Added regression coverage for Elixir profile inclusion, Xcode simulator allowances, Chrome for Testing Crashpad startup, Electron GUI drag-and-drop lookup, tty/pty ioctl handling, and Git workdir denial diagnostics.
+
+### Thanks
+
+- @greg0x fixing Xcode license and SPM cache access in [#81](https://github.com/eugene1g/agent-safehouse/pull/81).
+- @nathanmsmith adding Elixir runtime support in [#82](https://github.com/eugene1g/agent-safehouse/pull/82).
+- @rularner adding Xcode simulator support in [#92](https://github.com/eugene1g/agent-safehouse/pull/92).
+- @thegalexc fixing Chrome for Testing Crashpad startup in [#90](https://github.com/eugene1g/agent-safehouse/pull/90).
+- @saynomoo surfacing the Finder drag-and-drop GUI app denial fixed in this release in [#95](https://github.com/eugene1g/agent-safehouse/issues/95).
+- @lucagentile fixing tty/pty ioctl handling for terminal raw mode in [#98](https://github.com/eugene1g/agent-safehouse/pull/98).
+
+### Changed Sandboxing Profiles
+
+- [`10-system-runtime.sb`](https://github.com/eugene1g/agent-safehouse/compare/v0.9.0...v0.10.0#diff-c27b7abd9dcf3cd976d593264e5d14dcfc2e10422b3dcdebb8bb9dbee4d611c8): Added tty/pty `file-ioctl` allowances so interactive agents can switch terminals into raw mode reliably.
+- [`elixir.sb`](https://github.com/eugene1g/agent-safehouse/compare/v0.9.0...v0.10.0#diff-80a71899199b2a47ed95946d28f5525f6ac308a04dd451a8ce8b6ebf35e360c8): Added Mix and Hex cache/state access for Elixir workflows.
+- [`chromium-full.sb`](https://github.com/eugene1g/agent-safehouse/compare/v0.9.0...v0.10.0#diff-d542719401c3da098b9f40fa32c7f156af327e4ac8e980ef85b48d73fe7c2e82): Added Chrome for Testing Crashpad xattr and child-port handshake access required during startup.
+- [`macos-gui.sb`](https://github.com/eugene1g/agent-safehouse/compare/v0.9.0...v0.10.0#diff-3ddea98ee8aa3646b2cb0d688dac05b16fdc45a52697fcf2e38bd0ab26c3600c): Added the CoreDrag lookup used by Finder drag-and-drop into GUI apps.
+- [`xcode.sb`](https://github.com/eugene1g/agent-safehouse/compare/v0.9.0...v0.10.0#diff-d037b532f9b9bff74bf91c2037f0c0340ebd8cd1bf90fb1d36e4641cb11d8396): Added system license plist, SwiftPM cache, and CoreSimulator namespace access needed by Xcode build and simulator workflows.
+
 ## [0.9.0] - 2026-03-27
 
 ### Features

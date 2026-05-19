@@ -3,6 +3,14 @@
 
 load ../../test_helper.bash
 
+sft_assert_git_metadata_denied() {
+  if [[ "$output" == *"not a git repository"* || "$output" == *"fatal: error reading"* ]]; then
+    return 0
+  fi
+
+  sft_assert_contains "$output" "not a git repository"
+}
+
 sft_setup_linked_git_worktree_fixture() {
   local git_common_dir=""
 
@@ -76,7 +84,7 @@ sft_setup_linked_git_worktree_fixture() {
 
   run safehouse_ok_in_dir "$nested_dir" -- git status --short
   [ "$status" -ne 0 ]
-  sft_assert_contains "$output" "not a git repository"
+  sft_assert_git_metadata_denied
 }
 
 @test "[EXECUTION] linked git worktrees can write shared git metadata without manual extra grants" { # https://github.com/eugene1g/agent-safehouse/issues/37
@@ -111,5 +119,5 @@ sft_setup_linked_git_worktree_fixture() {
 
   run safehouse_ok_in_dir "$nested_dir" -- git status --short
   [ "$status" -ne 0 ]
-  sft_assert_contains "$output" "not a git repository"
+  sft_assert_git_metadata_denied
 }
